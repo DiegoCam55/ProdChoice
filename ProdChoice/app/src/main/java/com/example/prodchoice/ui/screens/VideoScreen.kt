@@ -17,7 +17,9 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 
 @Composable
 fun VideoScreen() {
-    val videoId = "https://www.youtube.com/watch?v=0INHiFMOlHw"
+    // ID del video que pasaste: tyx05coXixw
+    // Si sigue saliendo "unavailable", prueba con este ID de prueba: "S0Q4gqBUs7c" (Video de Google)
+    val videoId = "0jBKaxscBSI"
     val lifecycleOwner = LocalLifecycleOwner.current
 
     Column(
@@ -27,7 +29,7 @@ fun VideoScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Video Promocional",
+            text = "Reproductor de Video",
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.Bold,
@@ -42,47 +44,38 @@ fun VideoScreen() {
             shape = RoundedCornerShape(12.dp)
         ) {
             Column {
-                // Contenedor del reproductor de YouTube
                 AndroidView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(16f / 9f)
-                        .clip(RoundedCornerShape(topStart = 15.dp, topEnd = 12.dp)),
+                        .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)),
                     factory = { context ->
                         YouTubePlayerView(context).apply {
                             lifecycleOwner.lifecycle.addObserver(this)
                             addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
                                 override fun onReady(youTubePlayer: YouTubePlayer) {
-                                    youTubePlayer.cueVideo(videoId, 0f)
+                                    // Intentamos cargar el video
+                                    youTubePlayer.loadVideo(videoId, 0f)
                                 }
                             })
                         }
                     }
                 )
 
-                // Información del video debajo del reproductor
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "ProdChoice: Presentación Oficial",
+                        text = "Contenido Multimedia",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "Conoce más sobre nuestra visión y los productos que tenemos para ti en este video informativo.",
+                        text = "Si ves el error 'unavailable', es probable que el autor del video haya desactivado la reproducción en aplicaciones externas.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
         }
-        
-        Spacer(modifier = Modifier.height(24.dp))
-        
-        Text(
-            text = "Más videos próximamente...",
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.outline
-        )
     }
 }
